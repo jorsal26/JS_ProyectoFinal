@@ -7,10 +7,10 @@ var totalPedido = 0.00;
 //fecha actual
 const fechaDeHoy = new Date();
 
+var listaPedidos = [];
+
 //defino por defecto la fecha actual obtenida
 document.getElementById("fechaPedido").value = fechaDeHoy.toJSON().slice(0,10);
-
-var listaPedidos = [];
 
 const cliente = document.querySelector("#cliente");
 const datosDelPedido = document.getElementById("datosDelPedido");
@@ -18,6 +18,7 @@ const fechaPedido = document.getElementById("fechaPedido");
 const botonAgregar = document.getElementById("btnAgregar");
 
 cargarPedidos();
+
 
 document.querySelector(".formpedido").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -55,6 +56,10 @@ function addPedido() {
 
 function renderPedidos() {
     console.log('renderPedidos');
+    const campoCantidad = document.getElementById('cantidad');
+    campoCantidad.value = listaPedidos.length;
+
+    listaPedidos.sort((a, b) => datediff(a.fecha) - datediff(b.fecha));
 
     const listaPedidosHTML = listaPedidos.map((event) => {
     return `
@@ -128,6 +133,16 @@ function cargarPedidos() {
         console.log(data);
         listaPedidos = data;
         guardarDatos(JSON.stringify(listaPedidos));
+
+        const eventos = listaPedidos;
+
+        // Filtrar eventos para una fecha específica (por ejemplo, '2024-05-15')
+        const fechaSeleccionada = fechaDeHoy.toJSON().slice(0,10);
+        const eventosFiltrados = listaPedidos.filter(evento => evento.fecha === fechaSeleccionada);
+        
+        console.log("eventosFiltrados "+fechaSeleccionada); // Mostrará los eventos correspondientes a esa fecha
+        console.log(eventosFiltrados); // Mostrará los eventos correspondientes a esa fecha
+
         renderPedidos();
     })
     .catch(error => console.error('Error al cargar los pedidos del archivo JSON:', error));
@@ -139,26 +154,4 @@ function guardarDatos(data) {
 
 function leerDatos() {
     return JSON.parse(localStorage.getItem("items"));
-}
-
-function cartasDePedidos() {
-    //cards con los pedidos
-    //interactuar con campos de texto
-    const campoCantidad = document.getElementById('cantidad');
-    campoCantidad.value = listaPedidos.length;
-
-    const articuloCartas = document.getElementById('cartas');
-    articuloCartas.className = 'row container gap-3 mx-auto my-3'
-
-    for (const pedido of listaPedidos){
-        articuloCartas.innerHTML+=`
-        <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">${pedido.nombre}</h5>
-            <p class="card-text">Precio: $ ${pedido.precio}</p>
-            <button class="btn btn-primary">Comprar</button>
-        </div>
-        </div>
-        `
-    }
 }

@@ -9,6 +9,7 @@
 
     <!-- CSS | Conecto el CSS con el HTML -->
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.4/main.min.css" rel="stylesheet">
 
     <title>JS Proyecto Final</title>
 </head>
@@ -19,6 +20,13 @@
         <header class="cabecera">
             <h1>GESTION DE PEDIDOS</h1>
         </header>
+
+        
+        <section class="calendarioPedidos">
+            <h2>Consulta de Pedidos</h2>
+            <div id="calendario"></div>
+            
+        </section>
 
         <section class="formpedido">
             <form>
@@ -37,30 +45,15 @@
                 <textarea id="datosDelPedido" name="datosDelPedido" required></textarea>
                     <!-- <input type="text" id="datosDelPedido" /> -->
                 <input type="button" id="btnAgregar" value="Agregar Pedido" />
+                <label>CANTIDAD DE PEDIDOS</label>
+
+                <input id="cantidad" type="number" placeholder="aqui cantidad de pedidos">
             </form>
         </section>
 
         <section class="grillapedidos">
         </section>
 
-        <!-- <section id="principal" class="container-fluid">
-            <article id="articulo">
-                <p>LISTA DE PEDIDOS</p>
-                <p></p>
-            </article>
-            <br>
-            <article>
-                <label>CANTIDAD DE PEDIDOS</label>
-                <input id="cantidad" type="number" placeholder="aqui cantidad de stock">
-            </article>
-            <article id="inferior">
-                <!-- Aqui tabla -->
-            </article>
-            <article id="cartas" class="row">
-                <!-- aqui cartas -->
-            </article>
-        </section> -->
-    
         <footer class="pie">
             <p>&copy; 2024 JorsaL. Todos los derechos reservados.</p>
         </footer>
@@ -71,5 +64,27 @@
     <!--Conecto JS de Bootstrap-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.4/main.min.js"></script>
+    
+    <script>
+        const eventos = listaPedidos.map((event) => event.cliente)
+        document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendario');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth', locale: 'es',// Vista mensual
+            events: [{
+                title: "Prueba",
+                start: '2024-05-15'
+            }],
+            eventClick: function(info) {
+                // Acción al hacer clic en un evento (puedes abrir un modal, por ejemplo)
+                console.log(info.event.title); // Título del evento
+                console.log(info.event.start); // Fecha de inicio
+            }
+        });
+        calendar.render();
+        });
+    </script>
 </body>
 </html>
